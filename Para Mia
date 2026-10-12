@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Para ti 💌</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #121212;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0;
+            overflow-x: hidden;
+        }
+
+        .main-card {
+            background: linear-gradient(135deg, #fff5f8 0%, #fde2eb 100%);
+            border: 3px solid #ff2a85;
+            box-shadow: 0 10px 30px rgba(255, 42, 133, 0.25);
+            border-radius: 20px;
+            width: 90%;
+            max-width: 450px;
+            padding: 40px;
+            text-align: center;
+            position: relative;
+        }
+
+        .btn-primary {
+            background-color: #ff2a85;
+            color: #ffffff;
+            font-weight: 600;
+            padding: 12px 25px;
+            border-radius: 12px;
+            transition: transform 0.2s, background-color 0.2s;
+            width: 100%;
+            margin-bottom: 15px;
+            box-shadow: 0 4px 10px rgba(255, 42, 133, 0.2);
+        }
+
+        .btn-primary:hover {
+            background-color: #d81b60;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background-color: #e0a3b8;
+            color: #4a4a4a;
+            font-weight: 600;
+            padding: 12px 25px;
+            border-radius: 12px;
+            transition: transform 0.2s, background-color 0.2s;
+            width: 100%;
+        }
+
+        .btn-secondary:hover {
+            background-color: #c9859d;
+        }
+
+        .input-text {
+            width: 100%;
+            padding: 15px;
+            border-radius: 12px;
+            border: 1px solid #ff2a85;
+            background: rgba(255, 255, 255, 0.8);
+            margin-bottom: 20px;
+            text-align: center;
+            font-size: 16px;
+        }
+
+        .letter-box {
+            text-align: left;
+            background: rgba(255, 255, 255, 0.7);
+            border: 1px dashed #ff2a85;
+            padding: 20px;
+            border-radius: 12px;
+            max-height: 250px;
+            overflow-y: auto;
+            margin-bottom: 20px;
+            font-size: 15px;
+            color: #333333;
+            line-height: 1.7;
+            white-space: pre-wrap;
+        }
+
+        .step-content {
+            display: none;
+        }
+
+        .step-content.active {
+            display: block;
+        }
+
+        /* Editor Modal */
+        #editorPanel {
+            display: none;
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #222;
+            color: #fff;
+            padding: 20px;
+            border-radius: 15px;
+            width: 320px;
+            max-height: 90vh;
+            overflow-y: auto;
+            z-index: 1000;
+            text-align: left;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+            border: 1px solid #ff2a85;
+        }
+    </style>
+</head>
+<body>
+
+    <button onclick="toggleEditor()" class="fixed top-5 right-5 bg-[#ff2a85] text-white p-3 rounded-full shadow-lg z-50">
+        🛠️
+    </button>
+
+    <div id="editorPanel">
+        <h4 class="text-lg font-bold mb-4 text-[#ff2a85]">Modo Editor ✍️</h4>
+        
+        <div class="mb-4">
+            <label class="block text-sm text-gray-400 mb-1">Nombre de ella:</label>
+            <input type="text" id="in-name" value="Mi mejor amiga" oninput="updateContent()" class="w-full bg-slate-800 border-slate-600 border rounded p-2 text-white">
+        </div>
+
+        <hr class="border-slate-700 my-4">
+
+        <div class="mb-4">
+            <span class="font-semibold block mb-2 text-[#ff2a85]">Paso 1</span>
+            <label class="block text-sm text-gray-400 mb-1">Pregunta:</label>
+            <input type="text" id="in-p1-text" value="Estás a punto de abrir algo creado solo para ti. ¿Estás lista?" oninput="updateContent()" class="w-full bg-slate-800 border-slate-600 border rounded p-2 text-white mb-2">
+            
+            <label class="block text-sm text-gray-400 mb-1">Botón Aceptar:</label>
+            <input type="text" id="in-p1-btn" value="¡Sí, obvio!" oninput="updateContent()" class="w-full bg-slate-800 border-slate-600 border rounded p-2 text-white mb-2">
+            
+            <label class="block text-sm text-gray-400 mb-1">Botón "No":</label>
+            <input type="text" id="in-p1-nobtn" value="No sé ah..." oninput="updateContent()" class="w-full bg-slate-800 border-slate-600 border rounded p-2 text-white">
+        </div>
+
+        <hr class="border-slate-700 my-4">
+
+        <div class="mb-4">
+            <span class="font-semibold block mb-2 text-[#ff2a85]">Paso 2</span>
+            <label class="block text-sm text-gray-400 mb-1">Pregunta:</label>
+            <input type="text" id="in-p2-text" value="De todo este tiempo siendo mejores amigos, escribe qué es lo que más valoras de nuestra amistad:" oninput="updateContent()" class="w-full bg-slate-800 border-slate-600 border rounded p-2 text-white mb-2">
+            
+            <label class="block text-sm text-gray-400 mb-1">Texto Sugerido (Caja):</label>
+            <input type="text" id="in-p2-placeholder" value="Escribe aquí..." oninput="updateContent()" class="w-full bg-slate-800 border-slate-600 border rounded p-2 text-white mb-2">
+
+            <label class="block text-sm text-gray-400 mb-1">Botón Enviar:</label>
+            <input type="text" id="in-p2-btn" value="Continuar 🚀" oninput="updateContent()" class="w-full bg-slate-800 border-slate-600 border rounded p-2 text-white">
+        </div>
+
+        <hr class="border-slate-700 my-4">
+
+        <div class="mb-4">
+            <span class="font-semibold block mb-2 text-[#ff2a85]">Sección Carta</span>
+            <label class="block text-sm text-gray-400 mb-1">Título:</label>
+            <input type="text" id="in-p3-title" value="Para ti" oninput="updateContent()" class="w-full bg-slate-800 border-slate-600 border rounded p-2 text-white mb-2">
+            
+            <label class="block text-sm text-gray-400 mb-1">Tu carta:</label>
+            <textarea id="in-p3-letter" oninput="updateContent()" class="w-full bg-slate-800 border-slate-600 border rounded p-2 text-white h-32 mb-2">La verdad desde hace tiempo quería decirte lo mucho que significas para mí...</textarea>
+
+            <label class="block text-sm text-gray-400 mb-1">Botón Final:</label>
+            <input type="text" id="in-p3-btn" value="Listo ✨" oninput="updateContent()" class="w-full bg-slate-800 border-slate-600 border rounded p-2 text-white">
+        </div>
+
+        <button onclick="copyHTML()" class="w-full bg-[#d81b60] text-white font-bold py-2 rounded-lg mt-4">Copiar Código HTML</button>
+    </div>
+
+    <div class="main-card">
+        
+        <!-- Paso 1 -->
+        <div id="step-1" class="step-content active">
+            <h2 class="text-3xl font-bold text-[#d81b60] mb-6" id="disp-title">Hola... 👋</h2>
+            <p class="text-lg text-gray-700 mb-8 leading-relaxed" id="disp-p1-text">Estás a punto de abrir algo creado solo para ti. ¿Estás lista?</p>
+            <button class="btn-primary" onclick="showStep(2)" id="disp-p1-btn">¡Sí, obvio!</button>
+            <button class="btn-secondary" id="btn-no" onmouseover="moveNoButton()" onclick="moveNoButton()" id="disp-p1-nobtn">No sé ah...</button>
+        </div>
+
+        <!-- Paso 2 -->
+        <div id="step-2" class="step-content">
+            <h2 class="text-2xl font-bold text-[#d81b60] mb-6">Pregunta importante 💭</h2>
+            <p class="text-lg text-gray-700 mb-6 leading-relaxed" id="disp-p2-text">De todo este tiempo siendo mejores amigos, escribe qué es lo que más valoras de nuestra amistad:</p>
+            <textarea class="input-text" id="disp-p2-placeholder" rows="4" placeholder="Escribe aquí..."></textarea>
+            <button class="btn-primary" onclick="saveAnswerAndShowStep(3)" id="disp-p2-btn">Continuar 🚀</button>
+        </div>
+
+        <!-- Paso 3 -->
+        <div id="step-3" class="step-content">
+            <h2 class="text-3xl font-bold text-[#d81b60] mb-6" id="disp-p3-title">Para ti</h2>
+            
+            <!-- Aquí aparecerá lo que ella escribió en el paso anterior -->
+            <div id="user-response-box" class="hidden mb-6 p-4 bg-pink-100 rounded-lg border-l-4 border-[#ff2a85] text-left italic">
+                <span class="block text-xs text-[#d81b60] font-bold uppercase mb-1">Lo que escribiste:</span>
+                <p id="usr-answer" class="text-gray-700"></p>
+            </div>
+
+            <div class="letter-box">
+                <p id="disp-p3-letter">La verdad desde hace tiempo quería decirte lo mucho que significas para mí...</p>
+            </div>
+            <button class="btn-primary" onclick="alert('¡Gracias por leer!')" id="disp-p3-btn">Listo ✨</button>
+        </div>
+
+    </div>
+
+    <script>
+        function showStep(step) {
+            document.querySelectorAll('.step-content').forEach(el => el.classList.remove('active'));
+            document.getElementById('step-' + step).classList.add('active');
+        }
+
+        function saveAnswerAndShowStep(step) {
+            const answer = document.getElementById('disp-p2-placeholder').value;
+            if(answer.trim() !== "") {
+                document.getElementById('usr-answer').innerText = answer;
+                document.getElementById('user-response-box').classList.remove('hidden');
+            }
+            showStep(step);
+        }
+
+        function moveNoButton() {
+            const btn = document.getElementById('btn-no');
+            const x = Math.random() * 160 - 80;
+            const y = Math.random() * 100 - 50;
+            btn.style.transform = `translate(${x}px, ${y}px)`;
+        }
+
+        function toggleEditor() {
+            const panel = document.getElementById('editorPanel');
+            panel.style.display = panel.style.display === 'block' ? 'none' : 'block';
+        }
+
+        function updateContent() {
+            const name = document.getElementById('in-name').value;
+            document.getElementById('disp-title').innerText = "Hola, " + name + " 👋";
+            
+            document.getElementById('disp-p1-text').innerText = document.getElementById('in-p1-text').value;
+            document.getElementById('disp-p1-btn').innerText = document.getElementById('in-p1-btn').value;
+            document.getElementById('btn-no').innerText = document.getElementById('in-p1-nobtn').value;
+            
+            document.getElementById('disp-p2-text').innerText = document.getElementById('in-p2-text').value;
+            document.getElementById('disp-p2-placeholder').placeholder = document.getElementById('in-p2-placeholder').value;
+            document.getElementById('disp-p2-btn').innerText = document.getElementById('in-p2-btn').value;
+
+            document.getElementById('disp-p3-title').innerText = document.getElementById('in-p3-title').value;
+            document.getElementById('disp-p3-letter').innerText = document.getElementById('in-p3-letter').value;
+            document.getElementById('disp-p3-btn').innerText = document.getElementById('in-p3-btn').value;
+        }
+
+        function copyHTML() {
+            // Restore actual values to DOM before copying
+            updateContent();
+            
+            // Remove the editor panel and floating button from the clone
+            const fullHTML = document.documentElement.outerHTML;
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(fullHTML, 'text/html');
+            
+            doc.getElementById('editorPanel').remove();
+            doc.querySelector('button[onclick="toggleEditor()"]').remove();
+            
+            // Ensure tailwind CDN is intact
+            const finalCode = doc.documentElement.outerHTML;
+
+            navigator.clipboard.writeText(finalCode).then(() => {
+                alert("¡Código HTML copiado al portapapeles, mano!");
+            });
+        }
+    </script>
+</body>
+</html>
