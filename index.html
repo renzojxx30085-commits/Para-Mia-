@@ -256,10 +256,7 @@
         }
 
         function copyHTML() {
-            // Restore actual values to DOM before copying
             updateContent();
-            
-            // Remove the editor panel and floating button from the clone
             const fullHTML = document.documentElement.outerHTML;
             const parser = new DOMParser();
             const doc = parser.parseFromString(fullHTML, 'text/html');
@@ -267,7 +264,6 @@
             doc.getElementById('editorPanel').remove();
             doc.querySelector('button[onclick="toggleEditor()"]').remove();
             
-            // Ensure tailwind CDN is intact
             const finalCode = doc.documentElement.outerHTML;
 
             navigator.clipboard.writeText(finalCode).then(() => {
